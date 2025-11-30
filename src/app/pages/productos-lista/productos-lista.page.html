@@ -1,0 +1,268 @@
+<!-- src/app/pages/productos-lista/productos-lista.page.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      <div class="header-title">
+        <ion-icon name="cube-outline"></ion-icon>
+        Gestión de Productos
+      </div>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="nuevoProducto()">
+        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Top Bar con Estadísticas -->
+  <div class="top-bar" *ngIf="productos.length > 0">
+    <div class="stats-section">
+      <div class="stat-item">
+        <div class="stat-icon primary">
+          <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ productos.length }}</span>
+          <span class="stat-label">Total</span>
+        </div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-icon success">
+          <ion-icon name="checkmark-circle"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ contarProductosEnStock() }}</span>
+          <span class="stat-label">En Stock</span>
+        </div>
+      </div>
+      
+      <div class="stat-item">
+        <div class="stat-icon warning">
+          <ion-icon name="alert-circle"></ion-icon>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ contarProductosStockBajo() }}</span>
+          <span class="stat-label">Stock Bajo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Empty State Mejorado -->
+    <div *ngIf="productos.length === 0" class="empty-state">
+      <div class="empty-illustration">
+        <div class="empty-circle circle-1"></div>
+        <div class="empty-circle circle-2"></div>
+        <div class="empty-circle circle-3"></div>
+        <ion-icon name="cube-outline"></ion-icon>
+      </div>
+      
+      <h2>Sin productos registrados</h2>
+      <p>Comienza agregando tu primer producto al inventario</p>
+      
+      <button (click)="nuevoProducto()" class="empty-action-btn">
+        <ion-icon name="add-circle-outline"></ion-icon>
+        <span>Agregar Primer Producto</span>
+      </button>
+    </div>
+
+    <!-- Products Grid -->
+    <div *ngIf="productos.length > 0" class="products-container">
+      <div *ngFor="let producto of productos; let i = index" 
+           class="product-card"
+           [style.animation-delay.s]="i * 0.05">
+        
+        <!-- Imagen del Producto -->
+        <div class="product-image">
+          <!-- ✅ Mostrar imagen real si existe -->
+          <img 
+            *ngIf="producto.tieneImagen && producto.imagenThumbnail" 
+            [src]="producto.imagenThumbnail" 
+            [alt]="producto.nombre"
+            class="product-img">
+          
+          <!-- Placeholder solo si NO hay imagen -->
+          <div class="image-placeholder" *ngIf="!producto.tieneImagen">
+            <ion-icon name="image-outline"></ion-icon>
+          </div>
+          
+          <!-- Badge de Stock -->
+          <div class="stock-badge" 
+               [attr.data-status]="producto.stock === 0 ? 'danger' : producto.stock < 10 ? 'warning' : 'success'">
+            <ion-icon [name]="producto.stock === 0 ? 'close-circle' : producto.stock < 10 ? 'alert-circle' : 'checkmark-circle'"></ion-icon>
+            <span>{{ producto.stock }}</span>
+          </div>
+        </div>
+
+        <!-- Contenido del Producto -->
+        <div class="product-content">
+          
+          <!-- Categoría -->
+          <span class="product-category">
+            <ion-icon name="pricetag-outline"></ion-icon>
+            {{ producto.categoria }}
+          </span>
+
+          <!-- Nombre -->
+          <h3 class="product-name">
+            {{ producto.nombre }}
+          </h3>
+
+          <!-- Descripción -->
+          <p class="product-description" *ngIf="producto.descripcion">
+            {{ producto.descripcion }}
+          </p>
+
+          <!-- Precio y Stock -->
+          <div class="product-meta">
+            <div class="meta-item price">
+              <span class="meta-label">Precio</span>
+              <span class="meta-value">S/ {{ producto.precio | number:'1.2-2' }}</span>
+            </div>
+            <div class="meta-item stock">
+              <span class="meta-label">Stock</span>
+              <span class="meta-value" [class.low]="producto.stock < 10">
+                {{ producto.stock }} un.
+              </span>
+            </div>
+          </div>
+
+          <!-- Acciones -->
+          <div class="product-actions">
+            <button class="action-btn info" (click)="verDetalles(producto.id!)">
+              <ion-icon name="eye-outline"></ion-icon>
+              <span>Ver</span>
+            </button>
+            <button class="action-btn primary" (click)="editarProducto(producto.id!)">
+              <ion-icon name="create-outline"></ion-icon>
+              <span>Editar</span>
+            </button>
+            <button class="action-btn danger" (click)="eliminarProducto(producto.id!)">
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón Flotante -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="nuevoProducto()" class="fab-add">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- 🆕 MODAL DE DETALLES DEL PRODUCTO -->
+  <ion-modal 
+    [isOpen]="mostrarModal" 
+    (didDismiss)="cerrarModal()"
+    [breakpoints]="[0, 0.5, 0.75, 1]"
+    [initialBreakpoint]="0.75">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-title>Detalles del Producto</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cerrarModal()">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding" *ngIf="productoSeleccionado">
+        <div class="modal-container">
+          
+          <!-- Imagen Grande -->
+          <div class="modal-image-container">
+            <img 
+              *ngIf="productoSeleccionado.tieneImagen && productoSeleccionado.imagen" 
+              [src]="productoSeleccionado.imagen" 
+              [alt]="productoSeleccionado.nombre"
+              class="modal-image">
+            <div class="modal-image-placeholder" *ngIf="!productoSeleccionado.tieneImagen">
+              <ion-icon name="image-outline"></ion-icon>
+            </div>
+          </div>
+
+          <!-- Información del Producto -->
+          <div class="modal-info">
+            <div class="modal-header">
+              <h2>{{ productoSeleccionado.nombre }}</h2>
+              <span class="modal-category">
+                <ion-icon name="pricetag-outline"></ion-icon>
+                {{ productoSeleccionado.categoria }}
+              </span>
+            </div>
+
+            <p class="modal-description" *ngIf="productoSeleccionado.descripcion">
+              {{ productoSeleccionado.descripcion }}
+            </p>
+
+            <div class="modal-details">
+              <div class="detail-item">
+                <ion-icon name="cash-outline"></ion-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Precio Unitario</span>
+                  <span class="detail-value">S/ {{ productoSeleccionado.precio | number:'1.2-2' }}</span>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <ion-icon name="cube-outline"></ion-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Stock Disponible</span>
+                  <span class="detail-value" [class.low]="productoSeleccionado.stock < 10">
+                    {{ productoSeleccionado.stock }} unidades
+                  </span>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <ion-icon name="calculator-outline"></ion-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Valor Total en Inventario</span>
+                  <span class="detail-value">
+                    S/ {{ (productoSeleccionado.precio * productoSeleccionado.stock) | number:'1.2-2' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Estado del Stock -->
+            <div class="modal-stock-status" 
+                 [class.danger]="productoSeleccionado.stock === 0"
+                 [class.warning]="productoSeleccionado.stock > 0 && productoSeleccionado.stock <= 10"
+                 [class.success]="productoSeleccionado.stock > 10">
+              <ion-icon [name]="productoSeleccionado.stock === 0 ? 'close-circle' : productoSeleccionado.stock <= 10 ? 'alert-circle' : 'checkmark-circle'"></ion-icon>
+              <span>
+                {{ productoSeleccionado.stock === 0 ? 'Sin Stock' : 
+                   productoSeleccionado.stock <= 10 ? 'Stock Bajo - Reabastecer Pronto' : 
+                   'Stock Saludable' }}
+              </span>
+            </div>
+
+            <div class="modal-actions">
+              <button class="modal-btn primary" (click)="editarDesdeDetalles()">
+                <ion-icon name="create-outline"></ion-icon>
+                <span>Editar Producto</span>
+              </button>
+              <button class="modal-btn secondary" (click)="cerrarModal()">
+                <ion-icon name="close-outline"></ion-icon>
+                <span>Cerrar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

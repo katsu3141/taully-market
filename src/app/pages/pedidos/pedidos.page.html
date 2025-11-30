@@ -1,0 +1,32 @@
+<!-- src/app/pages/pedidos/pedidos.page.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button routerLink="/tienda">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Mis Pedidos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-text-center ion-padding">
+    <ion-icon name="receipt-outline" style="font-size: 80px; color: #ccc;"></ion-icon>
+    <h2>Funcionalidad en Desarrollo</h2>
+    <p>Pronto podrás ver el historial de tus pedidos aquí.</p>
+    <p style="color: #999; font-size: 0.9rem; margin-top: 20px;">
+      Esta sección mostrará:
+    </p>
+    <ul style="text-align: left; max-width: 400px; margin: 20px auto; color: #666;">
+      <li>Historial de pedidos realizados</li>
+      <li>Estado de cada pedido (Pendiente, En proceso, Entregado)</li>
+      <li>Detalles de productos y montos</li>
+      <li>Fecha de cada pedido</li>
+    </ul>
+    <ion-button routerLink="/tienda" color="primary" style="margin-top: 20px;">
+      <ion-icon slot="start" name="cart-outline"></ion-icon>
+      Volver a la Tienda
+    </ion-button>
+  </div>
+</ion-content>

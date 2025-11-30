@@ -1,0 +1,52 @@
+<!-- carrito.page.html -->
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Carrito de Compras</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="carrito.length > 0">
+    <ion-item *ngFor="let item of carrito">
+      <ion-label>
+        <h3>{{ item.producto.nombre }}</h3>
+        <p>S/. {{ item.producto.precio }} c/u</p>
+      </ion-label>
+      <ion-input 
+        type="number" 
+        [value]="item.cantidad"
+        min="1"
+        (ionInput)="actualizarCantidad(item.producto.id!, $event)"
+        style="width: 80px; margin-right: 10px;">
+      </ion-input>
+      <ion-button 
+        fill="clear" 
+        color="danger" 
+        (click)="eliminarProducto(item.producto.id!)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="carrito.length === 0" class="ion-text-center ion-padding">
+    <h2>Tu carrito está vacío</h2>
+    <p>Agrega productos desde la tienda</p>
+    <ion-button (click)="volver()" color="primary">
+      Ir a la Tienda
+    </ion-button>
+  </div>
+
+  <ion-card *ngIf="carrito.length > 0">
+    <ion-card-content>
+      <h2>Total: S/. {{ getTotalPrecio() }}</h2>
+      <ion-button expand="block" color="success" (click)="realizarPedido()">
+        Realizar Pedido
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

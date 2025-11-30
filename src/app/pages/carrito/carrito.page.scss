@@ -1,0 +1,44 @@
+// src/app/pages/carrito/carrito.page.scss
+ion-content {
+  --background: #f5f5f5;
+}
+
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: white;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+ion-input {
+  text-align: center;
+  font-weight: bold;
+}
+
+.ion-text-center {
+  margin-top: 50px;
+  
+  h2 {
+    color: #666;
+  }
+  
+  p {
+    color: #999;
+    margin-bottom: 20px;
+  }
+}
+
+ion-card {
+  margin-top: 20px;
+  
+  ion-card-content {
+    h2 {
+      text-align: center;
+      color: #2dd36f;
+      margin-bottom: 15px;
+    }
+  }
+}

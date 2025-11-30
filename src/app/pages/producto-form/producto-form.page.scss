@@ -1,0 +1,481 @@
+// src/app/pages/producto-form/producto-form.page.scss
+
+// 🎨 VARIABLES DE TEMA OSCURO
+:host {
+  --background-primary: #1a1a2e;
+  --background-secondary: #16213e;
+  --background-card: #0f3460;
+  --text-primary: #eaeaea;
+  --text-secondary: #a0a0a0;
+  --accent-color: #e94560;
+  --accent-secondary: #533483;
+  --border-color: #2d3561;
+  --input-bg: #1a1a2e;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+ion-content {
+  --background: var(--background-primary);
+}
+
+// 📦 CONTENEDOR PRINCIPAL
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background: var(--background-primary);
+  min-height: 100vh;
+}
+
+// 🎯 HEADER DE PÁGINA
+.page-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  animation: fadeInDown 0.6s ease-out;
+
+  .header-icon {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 32px rgba(233, 69, 96, 0.4);
+    animation: pulse 2s ease-in-out infinite;
+
+    ion-icon {
+      font-size: 48px;
+      color: white;
+    }
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: var(--text-primary);
+    text-shadow: 0 2px 4px var(--shadow-color);
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 15px;
+  }
+}
+
+// 📋 CONTENEDOR DEL FORMULARIO
+.form-container {
+  background: var(--background-secondary);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 32px var(--shadow-color);
+  border: 1px solid var(--border-color);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+// 📑 SECCIONES DEL FORMULARIO
+.form-section {
+  margin-bottom: 2.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+
+    ion-icon {
+      font-size: 28px;
+      color: var(--accent-color);
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--text-primary);
+
+      .optional {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--text-secondary);
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}
+
+// 🖼️ SECCIÓN DE IMAGEN
+.image-preview-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.image-preview {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px var(--shadow-color);
+  border: 3px solid var(--accent-color);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .btn-remove-image {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(233, 69, 96, 0.95);
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    ion-icon {
+      color: white;
+      font-size: 22px;
+    }
+
+    &:hover {
+      background: rgba(255, 59, 48, 1);
+      transform: scale(1.15) rotate(90deg);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+.image-placeholder {
+  width: 240px;
+  height: 240px;
+  border: 3px dashed var(--border-color);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--input-bg);
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--accent-color);
+    background: var(--background-card);
+  }
+
+  ion-icon {
+    font-size: 72px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    margin: 0;
+  }
+}
+
+// 📝 INPUTS
+.input-wrapper {
+  margin-bottom: 1.5rem;
+
+  .input-label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+
+    .required {
+      color: var(--accent-color);
+      margin-left: 4px;
+    }
+
+    .optional {
+      font-weight: 400;
+      color: var(--text-secondary);
+      margin-left: 4px;
+    }
+  }
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 15px;
+  color: var(--text-primary);
+  background: var(--input-bg);
+  transition: all 0.3s ease;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.15);
+    background: var(--background-card);
+  }
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:hover {
+    border-color: var(--accent-secondary);
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+// 💰 INPUT CON ICONO
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .input-icon {
+    position: absolute;
+    left: 1.25rem;
+    color: var(--accent-color);
+    font-weight: 700;
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 1;
+
+    ion-icon {
+      font-size: 22px;
+    }
+  }
+
+  .form-input.with-icon {
+    padding-left: 3rem;
+  }
+}
+
+// 📊 GRID DE INPUTS
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// 🎬 BOTONES DE ACCIÓN
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--border-color);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.btn {
+  flex: 1;
+  padding: 1.125rem 1.75rem;
+  border: none;
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: none;
+  position: relative;
+  overflow: hidden;
+
+  ion-icon {
+    font-size: 22px;
+    z-index: 1;
+  }
+
+  span {
+    z-index: 1;
+  }
+
+  ion-spinner {
+    margin-right: 8px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  &:not(:disabled):hover {
+    transform: translateY(-3px);
+  }
+
+  &:not(:disabled):active {
+    transform: translateY(0);
+  }
+
+  // Efecto de ondas
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  &:not(:disabled):active::before {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+  color: white;
+  box-shadow: 0 8px 24px rgba(233, 69, 96, 0.4);
+
+  &:not(:disabled):hover {
+    box-shadow: 0 12px 32px rgba(233, 69, 96, 0.6);
+  }
+}
+
+.btn-secondary {
+  background: var(--background-card);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+
+  &:not(:disabled):hover {
+    background: var(--background-primary);
+    border-color: var(--accent-color);
+  }
+}
+
+// ⏳ SPINNER DE CARGA
+ion-spinner {
+  --color: var(--accent-color);
+}
+
+// 🎭 ANIMACIONES
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+// 📱 RESPONSIVE
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .form-container {
+    padding: 1.5rem;
+  }
+
+  .page-header {
+    .header-icon {
+      width: 70px;
+      height: 70px;
+
+      ion-icon {
+        font-size: 36px;
+      }
+    }
+
+    h1 {
+      font-size: 26px;
+    }
+  }
+
+  .image-preview,
+  .image-placeholder {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+// 🌙 MODO CLARO (OPCIONAL - Comentado por defecto)
+/*
+@media (prefers-color-scheme: light) {
+  :host {
+    --background-primary: #f5f5f5;
+    --background-secondary: #ffffff;
+    --background-card: #fafafa;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666666;
+    --input-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+  }
+}
+*/
